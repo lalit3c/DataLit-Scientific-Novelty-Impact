@@ -133,4 +133,4 @@ jupyter notebook generate_embeddings.ipynb
 
 ---
 
-*This repository is part of a project work for "Data Literacy” course at the University of Tübingen, Winter 2025/26 (Module ML4201)*
+*This repository is part of a project work for "Data Literacy” course at the University of Tübingen, Winter 2025/26 (Module ML4201).*
