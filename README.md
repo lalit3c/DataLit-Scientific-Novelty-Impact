@@ -13,12 +13,12 @@ This repository contains the data collection and preprocessing pipeline for a sc
 ├── get_semantic_scholar_papers.ipynb      # Step 1: Download Semantic Scholar metadata
 ├── get_semantic_scholar_abstracts.ipynb   # Step 2: Download abstracts from Semantic Scholar
 ├── merge_papers_and_abstracts.ipynb       # Step 3: Merge metadata with abstracts
-├── harvest_openalex_primary.ipynb         # Step 4: Download papers from     OpenAlex by topic
-├── clean_and_merge_dbs.
-ipynb              # Step 5: Clean data and merge databases
+├── harvest_openalex_primary.ipynb         # Step 4: Download papers from OpenAlex by topic
+├── clean_and_merge_dbs.ipynb              # Step 5: Clean data and merge databases
 ├── generate_embeddings.ipynb              # Step 6: Generate SPECTER2 embeddings
 ├── compute_metrics.ipynb                  # Step 7: Compute novelty metrics
-├── analysis.ipynb         # Step 8: Novelty and Citation alalysis
+├── analysis.ipynb                         #
+Step 8: Novelty and Citation alalysis
 ├── data/                                  # Stored data artifacts
 │   ├── dbs/                               # SQLite databases
 │   ├── embeddings/                        # Precomputed embedding files
