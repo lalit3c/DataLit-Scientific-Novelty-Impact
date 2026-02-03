@@ -16,16 +16,24 @@ This repository contains the data collection, preprocessing pipeline and analysi
 ├── clean_and_merge_dbs.ipynb              # Step 5: Clean data and merge databases
 ├── generate_embeddings.ipynb              # Step 6: Generate SPECTER2 embeddings
 ├── compute_metrics.ipynb                  # Step 7: Compute novelty metrics
-├── analysis.ipynb                         # Step 8: Novelty and Citation alalysis
+├── AI_tsne.ipynb                          # Step 8: t-SNE visualization for AI papers
+├── tsne_per_paper.ipynb                   # Step 9: t-SNE visualization per paper (top papers)
+├── analysis.ipynb                         # Step 10: Novelty and Citation analysis
 ├── data/                                  # Stored data artifacts
-│   ├── dbs/                               # SQLite databases
-│   ├── embeddings/                        # Precomputed embedding files
-│   └── topic_sheets/                     # Topic definitions (AI, Physics, Psychology)
+│   ├── S2_papers_cleaned.db               # Cleaned Semantic Scholar papers
+│   ├── S2_papers_cleaned_additional_papers.db  # Additional cleaned papers
+│   ├── metrics.db                         # Computed novelty metrics
+│   ├── ai_top_papers_tsne_per_query.csv   # Top AI papers t-SNE data
+│   └── topic_sheets/                      # Topic definitions (AI, Physics, Psychology)
 ├── viz/                                   # Generated visualizations
 │   ├── Computer_Science_wordcloud_merged.png
-|   ├── Tsne_top5_AI.png
 │   ├── Physics_wordcloud_merged.png
-│   └── Psychology_wordcloud_merged.png
+│   ├── Psychology_wordcloud_merged.png
+│   ├── TSNE-top_5_AI.png
+│   ├── attention_is_all_you_need_neighbors.pdf
+│   └── novelty_vs_citations_fixed_width_bins.pdf
+├── Report-OpeningLinesThatMatter.pdf      # Project report
+├── requirements.txt                       # Python dependencies
 └── README.md
 
 ```
@@ -106,7 +114,31 @@ Generates dense vector embeddings for papers using the SPECTER2 model.
 - `metrics.db` – Per-paper novelty metrics computed via ANN search
 - Uploaded to Hugging Face Hub: [`lalit3c/S2_CS_PHY_PYSCH_papers`](https://huggingface.co/datasets/lalit3c/S2_CS_PHY_PYSCH_papers)
 
-### 8. Analysis and Plot Generation
+### 8. t-SNE Visualization for AI Papers (`AI_tsne.ipynb`)
+
+Generates t-SNE visualizations to explore the embedding space of academic papers.
+
+- **Model:** SPECTER2 embeddings
+- **Input:** `S2_papers_cleaned.db`, `embeddings/*.db` files
+- **Output:** t-SNE plots for the top 5 most cited topics in AI, Physics, and Psychology
+- **Visualization:** `viz/TSNE-top_5_AI.png`
+
+### 9. t-SNE Per Paper Analysis (`tsne_per_paper.ipynb`)
+
+Generates per-paper t-SNE visualizations for top papers to analyze nearest neighbors in the embedding space.
+
+- **Input:** Embeddings from Hugging Face Hub, `S2_papers_cleaned.db`
+- **Output:** 
+  - `data/ai_top_papers_tsne_per_query.csv` - Top AI papers t-SNE coordinates
+  - `viz/attention_is_all_you_need_neighbors.pdf` - Neighbor analysis visualization
+
+
+### 10. Analysis and Plot Generation (`analysis.ipynb`)
+
+Analyzes the relationship between novelty metrics and citation counts across research domains.
+
+- **Input:** `metrics.db`, `S2_papers_cleaned.db`
+- **Output:** Analysis plots including `novelty_vs_citations_fixed_width_bins.pdf`
 
 
 ## Data Availability
@@ -119,22 +151,7 @@ The processed dataset is publicly available on Hugging Face Hub:
 
 ### Python Dependencies
 
-```
-pandas
-duckdb
-requests
-typing
-threading
-tqdm
-torch
-transformers
-adapters
-huggingface_hub
-numpy
-faiss
-datetime
-os
-```
+See `requirements.txt` for the full list. 
 
 ### API Keys Required
 
@@ -164,14 +181,22 @@ jupyter notebook clean_and_merge_dbs.ipynb
 # 6. Generate embeddings
 jupyter notebook generate_embeddings.ipynb
 
-# 7. Compue novelty metrics
+# 7. Compute novelty metrics
 jupyter notebook compute_metrics.ipynb
 
-#8. Analysis and plot generation
+# 8. t-SNE visualization for AI papers
+jupyter notebook AI_tsne.ipynb
+
+# 9. t-SNE per paper analysis for top papers
+jupyter notebook tsne_per_paper.ipynb
+
+# 10. Analysis and plot generation
 jupyter notebook analysis.ipynb
+
+
 ```
 
-> **Note:** Steps 1-4 require significant download time and storage due to the large size of the Semantic Scholar dataset. GPU is recommended for Step 5 (embedding generation).
+> **Note:** Steps 1-4 require significant download time and storage due to the large size of the Semantic Scholar dataset. GPU is recommended for Step 6 (embedding generation). Steps 9-10 require the openTSNE package.
 
 
 ---
