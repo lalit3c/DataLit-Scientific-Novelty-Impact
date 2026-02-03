@@ -10,16 +10,23 @@ This repository contains the data collection and preprocessing pipeline for a sc
 
 ```
 .
-├── get_semantic_scholar_papers.ipynb      # Step 1: Download paper metadata
-├── get_semantic_scholar_abstracts.ipynb   # Step 2: Download paper abstracts
-├── merge_papers_and_abstracts.ipynb       # Step 3: Merge metadata with abstracts
-├── clean_and_merge_dbs.ipynb              # Step 4: Clean data & classify domains
-├── generate_embeddings.ipynb              # Step 5: Generate SPECTER2 embeddings
+├── harvest_openalex_primary.ipynb         # Step 1: Download papers from     OpenAlex by topic
+├── get_semantic_scholar_papers.ipynb      # Step 2: Download Semantic Scholar metadata
+├── get_semantic_scholar_abstracts.ipynb   # Step 3: Download abstracts from Semantic Scholar
+├── merge_papers_and_abstracts.ipynb       # Step 4: Merge metadata with abstracts
+├── clean_and_merge_dbs.ipynb              # Step 5: Clean data and merge databases
+├── generate_embeddings.ipynb              # Step 6: Generate SPECTER2 embeddings
+├── compute_metrics.ipynb                  # Step 7: Compute novelty metrics
+├── data/                                  # Stored data artifacts
+│   ├── dbs/                               # SQLite databases
+│   ├── embeddings/                        # Precomputed embedding files
+│   └── topic_sheets/                     # Topic definitions (AI, Physics, Psychology)
 ├── viz/                                   # Generated visualizations
 │   ├── Computer_Science_wordcloud_merged.png
 │   ├── Physics_wordcloud_merged.png
 │   └── Psychology_wordcloud_merged.png
 └── README.md
+
 ```
 
 ## Pipeline Overview
@@ -47,7 +54,14 @@ Combines paper metadata with abstracts into a unified database.
 - **Output:** `db/S2_papers.db` - Merged database with papers and their abstracts
 - **Additional Output:** Wordcloud visualizations by field and decade
 
-### 4. Data Cleaning and Domain Classification (`clean_and_merge_dbs.ipynb`)
+
+### 4. Download papers from OpenAlex (`harvest_openalex_primary.ipynb`)
+
+Downloads openalex datsets for given topics
+- **Inputs:** `data/topic_sheets/AI.xlsx`, `data/topic_sheets/Physics.xlsx`, `data/topic_sheets/Psychology.xlsx`
+- **Outputs:** `data/dbs/openalex_ai.db`, `data/dbs/openalex_physics.db`, `data/dbs/openalex_psychology.db`
+
+### 5. Data Cleaning and Domain Classification (`clean_and_merge_dbs.ipynb`)
 
 Cleans the merged data and classifies papers into research domains using OpenAlex databases.
 
@@ -71,7 +85,7 @@ Cleans the merged data and classifies papers into research domains using OpenAle
 - `db/S2_papers_cleaned.db` - Cleaned and domain-classified papers
 - Uploaded to Hugging Face Hub: [`lalit3c/S2_CS_PHY_PYSCH_papers`](https://huggingface.co/datasets/lalit3c/S2_CS_PHY_PYSCH_papers)
 
-### 5. Embedding Generation (`generate_embeddings.ipynb`)
+### 6. Embedding Generation (`generate_embeddings.ipynb`)
 
 Generates dense vector embeddings for papers using the SPECTER2 model.
 
@@ -79,6 +93,20 @@ Generates dense vector embeddings for papers using the SPECTER2 model.
 - **Input Format:** `"Title [SEP] Abstract"`
 - **Embedding Dimension:** 768
 - **Output:** Embeddings uploaded to Hugging Face Hub: [`lalit3c/S2_CS_PHY_PYSCH_papers`](https://huggingface.co/datasets/lalit3c/S2_CS_PHY_PYSCH_papers)
+
+### 7. Compute Novelty Metrics(`compute_novelty.ipynb`)
+
+**Input Databases:**
+- `S2_papers_cleaned.db` – Cleaned Semantic Scholar metadata
+- `S2_papers_cleaned_additional_papers.db` – Additional cleaned papers
+- `embeddings/embeddings_*.db` – Sharded embedding databases
+
+**Output:**
+- `metrics.db` – Per-paper novelty metrics computed via ANN search
+- Uploaded to Hugging Face Hub: [`lalit3c/S2_CS_PHY_PYSCH_papers`](https://huggingface.co/datasets/lalit3c/S2_CS_PHY_PYSCH_papers)
+
+### 8. Analysis and Plot Generation
+
 
 ## Data Availability
 
@@ -94,12 +122,17 @@ The processed dataset is publicly available on Hugging Face Hub:
 pandas
 duckdb
 requests
+typing
+threading
 tqdm
 torch
 transformers
 adapters
 huggingface_hub
 numpy
+faiss
+datetime
+os
 ```
 
 ### API Keys Required
@@ -121,11 +154,20 @@ jupyter notebook get_semantic_scholar_abstracts.ipynb
 # 3. Merge papers and abstracts
 jupyter notebook merge_papers_and_abstracts.ipynb
 
-# 4. Clean data and classify domains
+# 4. Download openalex papers
+jupyter notebook harvest_openalex_primary.ipynb
+
+# 5. Clean data and classify domains
 jupyter notebook clean_and_merge_dbs.ipynb
 
-# 5. Generate embeddings
+# 6. Generate embeddings
 jupyter notebook generate_embeddings.ipynb
+
+# 7. Compue novelty metrics
+jupyter notebook compute_metrics.ipynb
+
+#8. Analysis and plot generation
+jupyter notebook analysis.ipynb
 ```
 
 > **Note:** Steps 1-4 require significant download time and storage due to the large size of the Semantic Scholar dataset. GPU is recommended for Step 5 (embedding generation).
