@@ -196,8 +196,7 @@ jupyter notebook analysis.ipynb
 
 ```
 
-> **Note:** Steps 1-4 require significant download time and storage due to the large size of the Semantic Scholar dataset. GPU is recommended for Step 6 (embedding generation). Steps 9-10 require the openTSNE package.
-
+> **Note:** Steps 1-4 require significant download time and storage due to the large size of the Semantic Scholar dataset. GPU is recommended for Step 6 (embedding generation).
 
 ---
 
