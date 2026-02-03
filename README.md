@@ -17,7 +17,7 @@ This repository contains the data collection and preprocessing pipeline for a sc
 ├── generate_embeddings.ipynb              # Step 5: Generate SPECTER2 embeddings
 ├── viz/                                   # Generated visualizations
 │   ├── Computer_Science_wordcloud_merged.png
-|   ├── AI_tsne.png
+|   ├── Tsne_top5_AI.png
 │   ├── Physics_wordcloud_merged.png
 │   └── Psychology_wordcloud_merged.png
 └── README.md
